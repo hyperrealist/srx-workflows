@@ -14,7 +14,7 @@ tiled_client_raw = tiled_client['raw']
 
 
 def xanes_textout(scanid=-1, header=[], userheader={}, column=[], usercolumn={},
-                  usercolumnname=[], output=True, filename_add='', filedir=None, logger=None):
+                  usercolumnname=[], output=True, logger=None):
     '''
     scan: can be scan_id (integer) or uid (string). default = -1 (last scan run)
     header: a list of items that exist in the event data to be put into the header
@@ -24,18 +24,12 @@ def xanes_textout(scanid=-1, header=[], userheader={}, column=[], usercolumn={},
             default = True
 
     '''
-    if (filedir is None):
-        # filedir = userdatadir
-        raise "Proposal directory (filedir) must be passed in order to write data to file"
     
     h = tiled_client_raw[scanid]
 
-    if (filename_add != ''):
-        filename = 'scan_' + str(h.start['scan_id']) + '_' + filename_add
-    else:
-        filename = 'scan_' + str(h.start['scan_id'])
+    filepath = f"/nsls2/data/srx/proposals/{h.start['cycle']}/{h.start['data_session']}/scan_{h.start['scan_id']}_xanes.txt"
 
-    with open(filedir+filename, 'w') as f:
+    with open(filepath, 'w') as f:
         
         dataset_client = h['primary']['data']
         
@@ -102,7 +96,7 @@ def xanes_textout(scanid=-1, header=[], userheader={}, column=[], usercolumn={},
 
 
 @task
-def xanes_afterscan_plan(scanid, filename, data_directory, roinum=1):
+def xanes_afterscan_plan(scanid, roinum=1):
     
     logger = get_run_logger()
     
@@ -204,7 +198,7 @@ def xanes_afterscan_plan(scanid, filename, data_directory, roinum=1):
                   userheader = userheaderitem, column = columnitem,
                   usercolumn = usercolumnitem,
                   usercolumnname = usercolumnitem.keys(),
-                  output = False, filename_add = filename, filedir=data_directory, logger=logger)
+                  output = False, logger=logger)
 
 
 def lookup_directory(start_doc):
@@ -248,11 +242,11 @@ def lookup_directory(start_doc):
 @flow(log_prints=True)
 def exporter(ref):
     
-    filename = "xanes.txt"
-    directory = "/tmp/"
+    # filename = "xanes.txt"
+    # directory = "/tmp/"
     
     logger = get_run_logger()
     logger.info("Start writing file...")
-    xanes_afterscan_plan(ref, filename, directory, roinum=1)
+    xanes_afterscan_plan(ref, roinum=1)
     logger.info("Finish writing file.")
     
