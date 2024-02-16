@@ -14,7 +14,7 @@ tiled_client_raw = tiled_client['raw']
 
 
 def xanes_textout(scanid=-1, header=[], userheader={}, column=[], usercolumn={},
-                  usercolumnname=[], output=True, filename_add='', filedir=None):
+                  usercolumnname=[], output=True, filename_add='', filedir=None, logger=None):
     '''
     scan: can be scan_id (integer) or uid (string). default = -1 (last scan run)
     header: a list of items that exist in the event data to be put into the header
@@ -54,14 +54,17 @@ def xanes_textout(scanid=-1, header=[], userheader={}, column=[], usercolumn={},
             if (item in dataset_client.keys()):
                 f.write('# ' + item + ': ' + str(dataset_client[item]) + '\n')
                 if (output is True):
-                    print(item + ' is written')
+                    if logger:
+                        logger.info(f"{item} is written")
             else:
-                print(item + ' is not in the scan')
+                if logger:
+                    logger.info(f"{item} is not in the scan")
 
         for key in userheader:
             f.write('# ' + key + ': ' + str(userheader[key]) + '\n')
             if (output is True):
-                print(key + ' is written')
+                if logger:
+                    logger.info(f"{key} is written")
         
         file_data = {}
         for idx, item in enumerate(column):
@@ -100,6 +103,9 @@ def xanes_textout(scanid=-1, header=[], userheader={}, column=[], usercolumn={},
 
 @task
 def xanes_afterscan_plan(scanid, filename, data_directory, roinum=1):
+    
+    logger = get_run_logger()
+    
     # Custom header list
     headeritem = []
     # Load header for our scan
@@ -125,15 +131,15 @@ def xanes_afterscan_plan(scanid, filename, data_directory, roinum=1):
     if 'xs' in h.start['detectors']:
         if (type(roinum) is not list):
             roinum = [roinum]
-        print(roinum)
+        logger.info(roinum)
         for i in roinum:
-            print(i)
+            logger.info(f"Current roinumber: {i}")
             roi_name = 'roi{:02}'.format(i)
             roi_key = []
             
             xs_channels = h['primary'].descriptors[0]['object_keys']['xs']
             for xs_channel in xs_channels:
-                print(xs_channel)
+                logger.info(f"Current xs_channel: {xs_channel}")
                 if "mca"+roi_name in xs_channel and "total_rbv" in xs_channel:
                     roi_key.append(xs_channel)
                     
@@ -193,12 +199,12 @@ def xanes_afterscan_plan(scanid, filename, data_directory, roinum=1):
     #         usercolumnitem['If-{:02}'.format(i)] = roisum
     #         usercolumnitem['If-{:02}'.format(i)].round(0)
     
-    print("Done with document")
+    logger.info("Done with document")
     xanes_textout(tiled_client_raw, scanid = scanid, header = headeritem,
                   userheader = userheaderitem, column = columnitem,
                   usercolumn = usercolumnitem,
                   usercolumnname = usercolumnitem.keys(),
-                  output = False, filename_add = filename, filedir=data_directory)
+                  output = False, filename_add = filename, filedir=data_directory, logger=logger)
 
 
 def lookup_directory(start_doc):
@@ -245,7 +251,8 @@ def exporter(ref):
     filename = "xanes.txt"
     directory = "/tmp/"
     
-    print("Start writing file...")
+    logger = get_run_logger()
+    logger.info("Start writing file...")
     xanes_afterscan_plan(ref, filename, directory, roinum=1)
-    print("Finish writing file.")
+    logger.info("Finish writing file.")
     
