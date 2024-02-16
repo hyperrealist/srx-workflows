@@ -200,7 +200,7 @@ def xanes_afterscan_plan(scanid, filename, data_directory, roinum=1):
     #         usercolumnitem['If-{:02}'.format(i)].round(0)
     
     logger.info("Done with document")
-    xanes_textout(tiled_client_raw, scanid = scanid, header = headeritem,
+    xanes_textout(scanid = scanid, header = headeritem,
                   userheader = userheaderitem, column = columnitem,
                   usercolumn = usercolumnitem,
                   usercolumnname = usercolumnitem.keys(),
