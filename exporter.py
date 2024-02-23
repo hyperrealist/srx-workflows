@@ -5,7 +5,6 @@ import numpy as np
 import time as ttime
 
 
-
 tiled_client = from_profile('nsls2')['srx']
 tiled_client_raw = tiled_client['raw']
 
