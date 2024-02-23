@@ -15,4 +15,3 @@ def end_of_run_workflow(stop_doc):
     data_validation(uid, return_state=True)
     exporter(uid)
     log_completion()
-
