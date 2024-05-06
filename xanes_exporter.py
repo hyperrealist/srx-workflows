@@ -225,7 +225,7 @@ def xanes_afterscan_plan(scanid):
 
 
 @flow(log_prints=True)
-def exporter(ref):
+def xanes_exporter(ref):
     logger = get_run_logger()
     logger.info("Start writing file...")
     xanes_afterscan_plan(ref)
