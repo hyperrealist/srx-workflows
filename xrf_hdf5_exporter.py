@@ -1,12 +1,28 @@
 from prefect import flow, task, get_run_logger
-from tiled.client import from_profile
 from pyxrf.api import make_hdf
+
+### Temporary solution until prefect deployment updates to 2024 environment ###
+###############################################################################
+import sys
+conda_env = "2024-1.0-py310"
+python_ver = "python3.10"
+overlay = [
+    f"/nsls2/data/srx/shared/config/bluesky_overlay/{conda_env}/lib/{python_ver}/site-packages",
+    f"/nsls2/conda/envs/{conda_env}/bin",
+    f"/nsls2/conda/envs/{conda_env}/lib/{python_ver}",
+    f"/nsls2/conda/envs/{conda_env}/lib/{python_ver}/lib-dynload",
+    f"/nsls2/conda/envs/{conda_env}/lib/{python_ver}/site-packages",
+]
+sys.path[:0] = overlay
+###############################################################################
+
+from tiled.client import from_profile
 
 tiled_client = from_profile("nsls2")["srx"]
 tiled_client_raw = tiled_client["raw"]
 
 @task
-def export(scanid):
+def export_xrf_hdf5(scanid):
     logger = get_run_logger()
 
     # Load header for our scan
@@ -28,5 +44,5 @@ def export(scanid):
 def xrf_hdf5_exporter(scanid):
     logger = get_run_logger()
     logger.info("Start writing file...")
-    export(scanid)
+    export_xrf_hdf5(scanid)
     logger.info("Finish writing file.")
