@@ -34,6 +34,14 @@ def export_xrf_hdf5(scanid):
         )
         return
 
+    # Check if this is an alignment scan
+    # scan_input array consists of [startx, stopx, number pts x, start y, stop y, num pts y, dwell]
+    if h.start["scan"]["scan_input"][5] == 1:
+        logger.info(
+            "This is likely an alignment scan. Not running pyxrf.api.make_hdf on this document."
+        )
+        return
+
     working_dir = f"/nsls2/data/srx/proposals/{h.start['cycle']}/{h.start['data_session']}"  # noqa: E501
     prefix = "autorun_scan2D"
 
