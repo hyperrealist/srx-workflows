@@ -51,6 +51,6 @@ def export_xrf_hdf5(scanid):
 @flow(log_prints=True)
 def xrf_hdf5_exporter(scanid):
     logger = get_run_logger()
-    logger.info("Start writing file...")
+    logger.info("Start writing file with xrf_hdf5 exporter...")
     export_xrf_hdf5(scanid)
-    logger.info("Finish writing file.")
+    logger.info("Finish writing file with xrf_hdf5 exporter.")
