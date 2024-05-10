@@ -1,10 +1,9 @@
 from prefect import flow, task, get_run_logger
-from pyxrf.api import make_hdf
 
 ### Temporary solution until prefect deployment updates to 2024 environment ###
 ###############################################################################
 import sys
-conda_env = "2024-1.0-py310"
+conda_env = "2024-1.0-py310-tiled"
 python_ver = "python3.10"
 overlay = [
     f"/nsls2/data/srx/shared/config/bluesky_overlay/{conda_env}/lib/{python_ver}/site-packages",
@@ -17,6 +16,7 @@ sys.path[:0] = overlay
 ###############################################################################
 
 from tiled.client import from_profile
+from pyxrf.api import make_hdf
 
 tiled_client = from_profile("nsls2")["srx"]
 tiled_client_raw = tiled_client["raw"]
