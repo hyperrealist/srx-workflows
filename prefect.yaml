@@ -15,7 +15,7 @@ push:
 # pull section allows you to provide instructions for cloning this project in remote locations
 pull:
 - prefect.deployments.steps.git_clone:
-    repository: https://github.com/NSLS-II-SRX/workflows.git
+    repository: https://github.com/NSLS-II-SRX/workflows
     branch: main
 
 # the deployments section allows you to provide configuration for deploying flows
@@ -27,7 +27,7 @@ deployments:
   entrypoint: exporter.py:exporter
   parameters: {}
   work_pool:
-    name: srx-agent-pool
+    name: srx-work-pool
     work_queue_name:
     job_variables: {}
   schedule:
@@ -39,7 +39,7 @@ deployments:
   entrypoint: end_of_run_workflow.py:end_of_run_workflow
   parameters: {}
   work_pool:
-    name: srx-agent-pool
+    name: srx-work-pool
     work_queue_name:
     job_variables: {}
   schedule:
