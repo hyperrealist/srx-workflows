@@ -113,7 +113,7 @@ def xanes_textout(
 
 
 @task
-def xanes_afterscan_plan(scanid, roinum=1):
+def xanes_afterscan_plan(scanid, roinum=None):
     logger = get_run_logger()
 
     # Custom header list
@@ -144,8 +144,10 @@ def xanes_afterscan_plan(scanid, roinum=1):
         raise KeyError("SRS not found in data!")
     # Include fluorescence data if present, allow multiple rois
     if "xs" in h.start["detectors"]:
-        if type(roinum) is not list:
-            roinum = [roinum]
+        if "ROI" in h.start["scan"].keys():
+            roinum = list(h.start["scan"]["ROI"])
+        else:
+            roinum = [1]  # if no ROI key found, assume ROI 1
         logger.info(roinum)
         for i in roinum:
             logger.info(f"Current roinumber: {i}")
@@ -223,5 +225,5 @@ def xanes_afterscan_plan(scanid, roinum=1):
 def exporter(ref):
     logger = get_run_logger()
     logger.info("Start writing file...")
-    xanes_afterscan_plan(ref, roinum=1)
+    xanes_afterscan_plan(ref)
     logger.info("Finish writing file.")
