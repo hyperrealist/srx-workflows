@@ -113,7 +113,7 @@ def xanes_textout(
 
 
 @task
-def xanes_afterscan_plan(scanid, roinum=None):
+def xanes_afterscan_plan(scanid):
     logger = get_run_logger()
 
     # Custom header list
