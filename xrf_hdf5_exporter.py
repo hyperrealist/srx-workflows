@@ -42,7 +42,11 @@ def export_xrf_hdf5(scanid):
         )
         return
 
-    working_dir = f"/nsls2/data/srx/proposals/{h.start['cycle']}/{h.start['data_session']}"  # noqa: E501
+    if "SRX Beamline Commissioning".lower() in h.start["proposal"]["proposal_title"].lower():
+        working_dir = f"/nsls2/data/srx/proposals/commissioning/{h.start['data_session']}"
+    else:
+        working_dir = f"/nsls2/data/srx/proposals/{h.start['cycle']}/{h.start['data_session']}"  # noqa: E501
+
     prefix = "autorun_scan2D"
 
     logger.info(f"{working_dir =}")
