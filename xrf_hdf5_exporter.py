@@ -1,5 +1,7 @@
 from prefect import flow, task, get_run_logger
 
+CATALOG_NAME = "srx"
+
 ### Temporary solution until prefect deployment updates to 2024 environment ###
 ###############################################################################
 import sys
@@ -18,7 +20,7 @@ sys.path[:0] = overlay
 from tiled.client import from_profile
 from pyxrf.api import make_hdf
 
-tiled_client = from_profile("nsls2")["srx"]
+tiled_client = from_profile("nsls2")[CATALOG_NAME]
 tiled_client_raw = tiled_client["raw"]
 
 @task
@@ -50,7 +52,7 @@ def export_xrf_hdf5(scanid):
     prefix = "autorun_scan2D"
 
     logger.info(f"{working_dir =}")
-    make_hdf(scanid, wd=working_dir, prefix=prefix)
+    make_hdf(scanid, wd=working_dir, prefix=prefix, catalog_name=CATALOG_NAME)
 
 @flow(log_prints=True)
 def xrf_hdf5_exporter(scanid):
