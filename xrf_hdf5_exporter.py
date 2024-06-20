@@ -44,7 +44,7 @@ def export_xrf_hdf5(scanid):
         )
         return
 
-    if "SRX Beamline Commissioning".lower() in h.start["proposal"]["proposal_title"].lower():
+    if "Beamline Commissioning (beamline staff only)".lower() in h.start["proposal"]["type"].lower():
         working_dir = f"/nsls2/data/srx/proposals/commissioning/{h.start['data_session']}"
     else:
         working_dir = f"/nsls2/data/srx/proposals/{h.start['cycle']}/{h.start['data_session']}"  # noqa: E501
