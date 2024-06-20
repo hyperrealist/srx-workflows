@@ -36,7 +36,7 @@ def logscan_detailed(scanid):
             f"/nsls2/data/srx/proposals/{h.start['cycle']}/{h.start['data_session']}/"
         )
 
-    if not Path(userdatadir).exist():
+    if not Path(userdatadir).exists():
         logger.info(
             "Incorrect path. Check cycle and proposal id in document. Not running the logger on this document."
         )
