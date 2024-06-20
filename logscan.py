@@ -25,8 +25,8 @@ def logscan_detailed(scanid):
     h = tiled_client_raw[scanid]
 
     if (
-        "SRX Beamline Commissioning".lower()
-        in h.start["proposal"]["proposal_title"].lower()
+        "Beamline Commissioning (beamline staff only)".lower()
+        in h.start["proposal"]["type"].lower()
     ):
         userdatadir = (
             f"/nsls2/data/srx/proposals/commissioning/{h.start['data_session']}/"
