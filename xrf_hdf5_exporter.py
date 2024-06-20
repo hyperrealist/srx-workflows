@@ -49,7 +49,7 @@ def export_xrf_hdf5(scanid):
     else:
         working_dir = f"/nsls2/data/srx/proposals/{h.start['cycle']}/{h.start['data_session']}"  # noqa: E501
 
-    prefix = "autorun_scan2D"
+    prefix = "autorun_scan2D_"
 
     logger.info(f"{working_dir =}")
     make_hdf(scanid, wd=working_dir, prefix=prefix, catalog_name=CATALOG_NAME)
