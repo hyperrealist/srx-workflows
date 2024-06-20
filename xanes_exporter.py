@@ -31,7 +31,7 @@ def xanes_textout(
     """
 
     h = tiled_client_raw[scanid]
-    if "SRX Beamline Commissioning".lower() in h.start["proposal"]["proposal_title"].lower():
+    if "Beamline Commissioning (beamline staff only)".lower() in h.start["proposal"]["type"].lower():
         filepath = f"/nsls2/data/srx/proposals/commissioning/{h.start['data_session']}/scan_{h.start['scan_id']}_xanes.txt"
     else:
         filepath = f"/nsls2/data/srx/proposals/{h.start['cycle']}/{h.start['data_session']}/scan_{h.start['scan_id']}_xanes.txt"  # noqa: E501
