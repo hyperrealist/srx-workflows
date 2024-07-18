@@ -17,6 +17,10 @@ overlay = [
 sys.path[:0] = overlay
 ###############################################################################
 
+import glob
+import os
+import stat
+
 from tiled.client import from_profile
 from pyxrf.api import make_hdf
 
@@ -38,13 +42,14 @@ def export_xrf_hdf5(scanid):
 
     # Check if this is an alignment scan
     # scan_input array consists of [startx, stopx, number pts x, start y, stop y, num pts y, dwell]
-    if h.start["scan"]["scan_input"][5] == 1:
+    idx_NUM_PTS_Y = 5
+    if h.start["scan"]["scan_input"][idx_NUM_PTS_Y] == 1:
         logger.info(
             "This is likely an alignment scan. Not running pyxrf.api.make_hdf on this document."
         )
         return
 
-    if "Beamline Commissioning (beamline staff only)".lower() in h.start["proposal"]["type"].lower():
+    if "SRX Beamline Commissioning".lower() in h.start["proposal"]["proposal_title"].lower():
         working_dir = f"/nsls2/data/srx/proposals/commissioning/{h.start['data_session']}"
     else:
         working_dir = f"/nsls2/data/srx/proposals/{h.start['cycle']}/{h.start['data_session']}"  # noqa: E501
@@ -53,6 +58,12 @@ def export_xrf_hdf5(scanid):
 
     logger.info(f"{working_dir =}")
     make_hdf(scanid, wd=working_dir, prefix=prefix, catalog_name=CATALOG_NAME)
+
+    # chmod g+w for created file(s)
+    # context: https://nsls2.slack.com/archives/C04UUSG88VB/p1718911163624149
+    for file in glob.glob(f"{working_dir}/{prefix}{scanid}*.h5"):
+        os.chmod(file, os.stat(file).st_mode | stat.S_IWGRP)
+
 
 @flow(log_prints=True)
 def xrf_hdf5_exporter(scanid):
