@@ -23,7 +23,7 @@ def logscan_detailed(scanid):
     logger = get_run_logger()
 
     h = tiled_client_raw[scanid]
-    logger.info(f"-- h --")
+    logger.info(f"{h.start = }")
 
     if (
         "Beamline Commissioning (beamline staff only)".lower()
