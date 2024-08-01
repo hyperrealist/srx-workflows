@@ -60,6 +60,7 @@ def logscan_detailed(scanid):
                 + "\n"
             )
             logger.info(f"Added {h.start['scan_id']} to the logs")
+            logger.info(h)
 
 
 @flow(log_prints=True)
