@@ -23,6 +23,7 @@ def logscan_detailed(scanid):
     logger = get_run_logger()
 
     h = tiled_client_raw[scanid]
+    logger.info(f"-- h --")
 
     if (
         "Beamline Commissioning (beamline staff only)".lower()
@@ -60,7 +61,6 @@ def logscan_detailed(scanid):
                 + "\n"
             )
             logger.info(f"Added {h.start['scan_id']} to the logs")
-            logger.info(h)
 
 
 @flow(log_prints=True)
