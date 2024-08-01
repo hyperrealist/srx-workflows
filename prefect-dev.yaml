@@ -20,16 +20,15 @@ push:
 pull:
 - prefect.deployments.steps.git_clone:
     repository: https://github.com/hyperrealist/srx-workflows
-    branch: fix-logscan-scaninput-keyerror
+    branch: fix-proposal-title-lookup
 
 # the deployments section allows you to provide configuration for deploying flows
 deployments:
 - name: srx-dev
   version:
   tags: [srx]
-  description: test deployment for propagating metadata changes to logscan
-  entrypoint: end_of_run_workflow.py:end_of_run_workflow
-  entrypoint: logscan.py:logscan
+  description: srx dev deployment
+  entrypoint: xrf_hdf5_exporter.py:xrf_hdf5_exporter
   parameters: {}
   work_pool:
     name: srx-work-pool
