@@ -1,0 +1,39 @@
+# To deploy this version you can
+#
+#     prefect deploy --prefect-file prefect-dev.yaml
+#
+# Welcome to your prefect.yaml file! You can use this file for storing and managing
+# configuration for deploying your flows. We recommend committing this file to source
+# control along with your flow code.
+
+# Generic metadata about this project
+name: workflows
+prefect-version: 2.15.0
+
+# build section allows you to manage and build docker images
+build:
+
+# push section allows you to manage if and how this project is uploaded to remote locations
+push:
+
+# pull section allows you to provide instructions for cloning this project in remote locations
+pull:
+- prefect.deployments.steps.git_clone:
+    repository: https://github.com/hyperrealist/srx-workflows
+    branch: fix-logscan-scaninput-keyerror
+
+# the deployments section allows you to provide configuration for deploying flows
+deployments:
+- name: srx-dev
+  version:
+  tags: [srx]
+  description: test deployment for propagating metadata changes to logscan
+  entrypoint: end_of_run_workflow.py:end_of_run_workflow
+  entrypoint: logscan.py:logscan
+  parameters: {}
+  work_pool:
+    name: srx-work-pool
+    work_queue_name:
+    job_variables: {}
+  schedule:
+  is_schedule_active: true
