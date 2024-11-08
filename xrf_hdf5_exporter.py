@@ -70,7 +70,7 @@ def export_xrf_hdf5(scanid):
 
     working_dir = f"{working_dir}/test"
 
-    logger.info(f"{os.umask(0) = }")
+    logger.info(f"{os.umask(0o007) = }")
 
     logger.info(f"{working_dir =}")
     make_hdf(scanid, wd=working_dir, prefix=prefix, catalog_name=CATALOG_NAME)
