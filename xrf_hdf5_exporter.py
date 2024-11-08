@@ -68,13 +68,16 @@ def export_xrf_hdf5(scanid):
 
     prefix = "autorun_scan2D_"
 
+    working_dir = f"{working_dir}/test"
+
     logger.info(f"{working_dir =}")
     make_hdf(scanid, wd=working_dir, prefix=prefix, catalog_name=CATALOG_NAME)
 
     # chmod g+w for created file(s)
     # context: https://nsls2.slack.com/archives/C04UUSG88VB/p1718911163624149
     for file in glob.glob(f"{working_dir}/{prefix}{scanid}*.h5"):
-        os.chmod(file, os.stat(file).st_mode | stat.S_IWGRP)
+        # os.chmod(file, os.stat(file).st_mode | stat.S_IWGRP)
+        logger.info(f"chmod not applied to {file = }")
 
 
 @flow(log_prints=True)
